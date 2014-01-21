@@ -1,5 +1,6 @@
 module World where
 
+import Test.QuickCheck
 import Prelude hiding ( id )
 import Data.Map ( Map, (!), fromList, adjust, insert, member, empty, keys )
 
@@ -13,9 +14,19 @@ data Dir = East | SouthEast | SouthWest
 data Color = Red | Black
     deriving (Eq, Show, Read)
 
+instance Arbitrary Color where
+    arbitrary     = oneof [return Red, return Black]
+
 other_color :: Color -> Color
 other_color Red   = Black
 other_color Black = Red
+
+other_color_Test x = 
+  other_color (other_color x) == x
+
+-- other_color_Test = 
+--   other_color . other_color == id
+  
 
 data Ant = Ant { id :: Integer
                , color :: Color
@@ -25,6 +36,24 @@ data Ant = Ant { id :: Integer
                , has_food :: Bool
                }
     deriving (Show, Eq, Read)
+
+instance Arbitrary Ant where
+  arbitrary = do
+    i <- choose (1,100)
+    c <- arbitrary
+    s <- choose (1,100000)
+    r <- choose (0,10)
+    d <- oneof (map return 
+                [East , SouthEast , SouthWest
+                , West , NorthWest , NorthEast])
+    f <- choose (True,False)
+    return Ant {id = i, 
+                color = c,
+                state = s,
+                resting = r,
+                direction = d,
+                has_food = f}
+                            
 
 -- Create the Ant data type (line 8 of section 2.2, p4) and the 
 -- accessor and update functions (line 3 of p5, section 2.2)

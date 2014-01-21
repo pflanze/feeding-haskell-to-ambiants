@@ -1,6 +1,8 @@
 module Engine where
 
+import Test.QuickCheck
 import World
+
 
 -- Define adjacent_cell from (section 2.1, page 3)
 adjacent_cell :: Pos -> Dir -> Pos
