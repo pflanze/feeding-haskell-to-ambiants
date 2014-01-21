@@ -26,12 +26,20 @@ data Ant = Ant { id :: Integer
                }
     deriving (Show, Eq, Read)
 
+-- Create the Ant data type (line 8 of section 2.2, p4) and the 
+-- accessor and update functions (line 3 of p5, section 2.2)
+
 defaultAnt = Ant { id = 0
                  , color = Red
-                 , state = 0
-                 , resting = 0
+                 , state = 0 -- 'PC'
+                 , resting = 0 -- before any other action (an ant has
+                               -- to rest for 14 how long the ant has
+                               -- to rest after its last move
+                               -- instruction) rounds after each time
+                               -- it executes a Move
                  , direction = East
-                 , has_food = False
+                 , has_food = False -- An ant can hold only a single
+                                    -- unit of food at a time
                  }
 
 set_state :: Ant -> Integer -> Ant
@@ -45,6 +53,18 @@ set_direction a d = a { direction = d }
 
 set_has_food :: Ant -> Bool -> Ant
 set_has_food a b = a { has_food = b }
+
+-- Define a Cell data structure that records all the 
+-- information for one cell and a World data structure 
+-- that holds all the cells in the game board (p5, section 
+-- 2.3).
+--
+-- The details of the Marker data type are on p7 (second 
+-- line of section 2.5)
+--
+-- There are some design choices to make with both data
+-- type. Read the rest of the functions required to make
+-- sure it can easily support the functions needed.
 
 data World = World { cells :: Map Pos Cell
                    , antPositions :: Map Integer Pos
